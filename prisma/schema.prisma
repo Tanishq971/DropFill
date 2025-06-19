@@ -1,0 +1,40 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int @id @default(autoincrement())
+  name      String
+  email     String @unique
+  password  String
+  Form      Form[]
+}
+model Form {
+  id               Int @id @default(autoincrement())
+  userId           Int
+  createdAt        DateTime @default(now())
+  published        Boolean @default(false)
+  formColor        String  @default("bg-gray-200")
+  name             String
+  content          String @default("[]")
+  description      String
+  visits           Int @default(0)
+  submissions      Int @default(0)
+  shareUrl         String @unique @default(uuid())
+  FormSubmissions  FormSubmissions[]
+  user             User @relation(fields:[userId] , references:[id])
+}
+
+model FormSubmissions{
+  id          Int @id @default(autoincrement())
+  createdAt   DateTime @default(now())
+  formId      Int
+  form         Form @relation(fields:[formId] , references:[id])
+  content      String
+}
