@@ -8,7 +8,7 @@ import Designer from "./Designer";
 import { DndContext, useSensor , MouseSensor , useSensors, TouchSensor} from "@dnd-kit/core";
 import DragOverlayWrapper from "./DragOverlayWrapper";
 import useDesigner from "./hooks/useDesigner";
-import { redirect, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
 
 
 
@@ -54,7 +54,7 @@ const FormBuilder = ({ form }: { form: Form }) => {
         </div>
         {/* //dotted background with a height of 200px */}
         <div
-          className="flex flex-grow  items-center justify-center relative overflow-y-auto h-screen bg-gray-50 dark:bg-gray-800
+          className="flex flex-grow  items-center justify-center relative overflow-y-auto h-screen bg-base
            bg-[radial-gradient(rgba(128,128,128,0.6)_1px,transparent_1px)] bg-[length:20px_20px]"
         >
           <Designer ></Designer>

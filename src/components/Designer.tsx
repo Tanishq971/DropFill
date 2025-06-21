@@ -67,8 +67,8 @@ const Designer = () => {
       if (isDesignerElement && (isDroppingOverTopHalf || isDroppingOverBottomHalf)) {
         const activeId = active.data?.current?.elementId;
         const overId = over.data?.current?.elementId;
-        let activeElementIndex = elements.findIndex((el) => el.id === activeId);
-        let overElementIndex = elements.findIndex((el) => el.id === overId);
+        const activeElementIndex = elements.findIndex((el) => el.id === activeId);
+        const overElementIndex = elements.findIndex((el) => el.id === overId);
 
         console.log("Active element index:", activeElementIndex);
         console.log("Over element index:", overElementIndex);

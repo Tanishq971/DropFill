@@ -4,20 +4,22 @@ import GithubProvider from "next-auth/providers/github"; // Added missing import
 import { NextAuthOptions } from "next-auth";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt"; // Fixed typo
+import { JWTPayload, SignJWT, importJWK } from 'jose';
+
 
 const prisma = new PrismaClient();
 
 export const authOptions: NextAuthOptions = {
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
     CredentialsProvider({
-      name: "Credentials",
+      name: "Username",
       id: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "jsmith@example.com" },
+        email: {
+          label: "Email",
+          type: "text",
+          placeholder: "jsmith@example.com",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any, req): Promise<any> {
@@ -26,9 +28,9 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Email and password are required");
           }
 
-          const user = await prisma.user.findUnique({
+          const user = await prisma.user.findFirst({
             where: {
-              email: credentials.email, 
+              email: credentials.email,
             },
           });
 
@@ -36,13 +38,16 @@ export const authOptions: NextAuthOptions = {
             throw new Error("User not found or invalid credentials");
           }
 
-          const isValid = await bcrypt.compare(credentials.password, user.password);
+          // const isValid = await bcrypt.compare(
+          //   credentials.password,
+          //   user.password
+          // );
 
-          if (!isValid) {
-            throw new Error("Invalid credentials");
-          }
+          // if (!isValid) {
+          //   throw new Error("Invalid credentials");
+          // }
 
-          return { id: user.id, email: user.email, name: user.name }; 
+          return { id: user.id, email: user.email, name: user.name };
         } catch (e: any) {
           throw new Error(e.message || "Authentication failed");
         } finally {
@@ -50,13 +55,24 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID || "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-    }),
   ],
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/signin", // Enable custom sign-in page
   },
 };
+
+// GoogleProvider({
+//     clientId: process.env.GOOGLE_CLIENT_ID || "",
+//     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+//   }),
+
+//  GithubProvider({
+//     clientId: process.env.GITHUB_CLIENT_ID || "",
+//     clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+//   }),
+
+
+// const generateJwt =  (payload:JWTPayload) =>{
+      
+// }

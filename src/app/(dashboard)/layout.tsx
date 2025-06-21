@@ -1,3 +1,4 @@
+"use client"
 import React, { ReactNode } from "react";
 import { Providers } from "./providers";
 import DesignerContextProvider from "@/components/context/DesignerContext";
@@ -8,7 +9,7 @@ const layout = ({ children }: { children: ReactNode }) => {
     <div className="flex flex-col min-h-screen min-w-full bg-background max-h-screen">
       <main className="flex w-full fllex-grow">
         <DesignerContextProvider>
-          <Providers>
+          <Providers >
             {children}
             <ToastProvider />
           </Providers>

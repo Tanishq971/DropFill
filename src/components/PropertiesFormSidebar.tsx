@@ -26,7 +26,7 @@ export default PropertiesFormSidebar;
 function PropertiesForm({element} : {element:FormElementInstance | null}){
     if(!element) return null;
     console.log("current element-->" , element)
-    let CurrElement = FormElements[element.type].propertiesComponent
+    const CurrElement = FormElements[element.type].propertiesComponent
     
     return <CurrElement elementInstance={element}></CurrElement>
 }
