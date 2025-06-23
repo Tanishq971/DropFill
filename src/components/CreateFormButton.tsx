@@ -27,6 +27,7 @@ import { z } from "zod";
 import { formSchema } from "@/lib/schema";
 import { createForm } from "@/actions/form";
 import { useRouter } from "next/navigation";
+import { LuPlus } from "react-icons/lu";
 
 
 const CreateFormButton = () => {
@@ -54,7 +55,10 @@ const CreateFormButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>create new form</Button>
+        <Button  className="hover:bg-purple-300  bg-purple-200 text-gray-600  px-3 py-2 rounded-md text-sm font-medium">
+          Create
+          <LuPlus className="text-3xl text-black"></LuPlus>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

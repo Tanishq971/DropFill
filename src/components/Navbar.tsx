@@ -1,5 +1,6 @@
+"use client"
+import CreateFormButton from "./CreateFormButton";
 import Link from "next/link";
-
 const Navbar = ({page}:{page?:string}) => {
   return (
     <nav className="bg-purple-700/90 bg-opacity-20 shadow-md sticky top-0 z-10">
@@ -26,12 +27,8 @@ const Navbar = ({page}:{page?:string}) => {
 
        
           <div className="flex items-center space-x-4">
-            <button className="text-white hover:bg-purple-600 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-              Sign In
-            </button>
-            <button className="bg-purple-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-purple-600">
-              Sign Up
-            </button>
+            <CreateFormButton>
+            </CreateFormButton>
           </div>
         </div>
       </div>

@@ -1,21 +1,23 @@
 import React from "react";
 import { getForms } from "@/actions/form";
+import FormCard from "@/components/FormCard";
+
+
 
 const FormsWrapper = async () => {
   const forms = await getForms();
   if (!forms.length) {
-    return <div>No forms created yet!</div>;
+    return (
+      <div className="col-span-full py-12 text-center text-gray-500">
+        No forms created yet!
+      </div>
+    );
   }
   return (
-    <div className="flex flex-grow">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4 w-full">
+     
       {forms.map((form) => {
-        return (
-          <div className=" flex flex-col gap-5 border-2 border-blue px-5">
-            <h1>{form.name}</h1>
-            <p>{form.description}</p>
-            <div className="w-full">for stats</div>
-          </div>
-        );
+        return <FormCard  key={form.id} form={form} />;
       })}
     </div>
   );

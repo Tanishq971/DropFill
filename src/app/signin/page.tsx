@@ -1,12 +1,13 @@
 "use client"
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const {data , status} = useSession();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -22,9 +23,22 @@ export default function SignIn() {
     if (result?.error) {
       setError(result.error);
     } else {
-      router.push("/explore"); // Redirect to homepage or desired page after login
+      router.push("/Browse"); // Redirect to homepage or desired page after login
     }
   };
+
+  useEffect(()=>{
+     
+    if(data){
+       router.push("/Browse")
+    }
+
+    if(status === "authenticated"){
+      console.log("here at useEffect")
+      
+    }
+  } , [])
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">

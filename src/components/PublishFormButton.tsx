@@ -39,7 +39,7 @@ const PublishFormButton = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button>Publish</Button>
+        <Button className="bg-pink-300">Publish</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

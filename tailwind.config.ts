@@ -6,12 +6,13 @@ const config: Config = {
     extend: {
       colors: {
         accent: "#f59e0b",
-        background: "#f9fafb",
+        background1: "",
         surface: "#ffffff",
         base:"#f9fafb",
         text: {
           DEFAULT: "#1f2937", // gray-800
           muted: "#6b7280", // gray-500
+          
         },
       },
     },

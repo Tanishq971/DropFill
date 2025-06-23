@@ -17,7 +17,7 @@ const PreviewDialogButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Preview</Button>
+        <Button className="bg-pink-300">Preview</Button>
       </DialogTrigger>
       <DialogContent
         className={cn(`

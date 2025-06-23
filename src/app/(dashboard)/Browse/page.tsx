@@ -1,25 +1,22 @@
-import { GetFormStats } from "@/actions/form";
-import { signIn, signOut } from "next-auth/react";
-import { LuView } from "react-icons/lu";
+
 import CreateFormButton from "@/components/CreateFormButton";
 import CardWrapper from "@/components/CardWrapper";
+import Navbar from "@/components/Navbar";
 import FormsWrapper from "@/components/FormsWrapper";
 
-const Home = async () => {
+const Home = () => {
   return (
-    <div className="container pt-4">
-      <div className="flex justify-center gap-4">
+    <div className="w-full ">
+      <Navbar></Navbar>
+      <div className="flex justify-center items-center gap-4">
         <CardWrapper />
       </div>
 
-      <div>
-        <CreateFormButton />
+      <div className="w-full mt-10 px-4 sm:px-6 lg:px-8 pt-4 pb-8">
+        <FormsWrapper></FormsWrapper>
       </div>
-      <FormsWrapper></FormsWrapper>
     </div>
   );
 };
 
 export default Home;
-
-

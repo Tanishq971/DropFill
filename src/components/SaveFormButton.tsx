@@ -9,7 +9,7 @@ import { ToastContentProps } from "react-toastify";
 
 const SaveFormButton = () => {
   const { elements } = useDesigner();
-  const [loading, startTransition] = useTransition(); //important hook and useful also
+  const [loading, startTransition] = useTransition(); // *
   const params = useParams();
   async function updateFormContent() {
     try {
@@ -20,7 +20,7 @@ const SaveFormButton = () => {
         className: "p-0 w-[500px] border border-purple-600/40 ",
       });
     } catch (e) {
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
     }
   }
 
@@ -28,6 +28,7 @@ const SaveFormButton = () => {
     <Button
       disabled={loading}
       onClick={() => startTransition(updateFormContent)}
+      className="bg-pink-300"
     >
       Save
     </Button>

@@ -2,32 +2,36 @@
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { formSchema } from "@/lib/schema";
+import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 
 const getSession = async () => {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   return session;
 };
+
 export async function GetFormStats() {
   const session = await getSession();
+
   console.log("Session in GetFormStats:", session);
-  // if(!session){
-  //     throw new Error("Unauthorized");
-  // }
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const email = session?.user?.email;
   const user = await prisma.user.findUnique({
     where: {
-      email: email || "sakshamkapoor2005@gmail.com",
+      email: email || "",
     },
   });
 
   if (!user) {
     throw new Error("User not found");
   }
-  // userId: user.id || 0,
 
   const stats = await prisma.form.aggregate({
     where: {
-      userId: 1,
+      userId: user.id,
     },
     _sum: {
       visits: true,
@@ -58,6 +62,7 @@ export async function createForm(data: {
   description: string | undefined;
 }) {
   const validation = formSchema.safeParse(data);
+
   if (!validation.success) {
     throw new Error("Form not valid!");
   }
@@ -65,9 +70,13 @@ export async function createForm(data: {
   const session = await getSession();
   const mail = session?.user?.email;
 
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const user = await prisma.user.findUnique({
     where: {
-      email: mail || "sakshamkapoor2005@gmail.com",
+      email: mail || "",
     },
   });
 
@@ -77,7 +86,7 @@ export async function createForm(data: {
 
   const form = await prisma.form.create({
     data: {
-      userId: user.id || 0,
+      userId: user.id,
       name: data.name,
       description: data.description || "",
     },
@@ -92,12 +101,16 @@ export async function createForm(data: {
 
 export async function getForms() {
   const session = await getSession();
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const mail = session?.user?.email;
-  // console.log(mail)
-  //issue in getting current user probabely the auth  problem.
+
   const user = await prisma.user.findUnique({
     where: {
-      email: mail || "sakshamkapoor2005@gmail.com",
+      email: mail || "",
     },
   });
 
@@ -110,16 +123,35 @@ export async function getForms() {
       userId: user.id,
     },
   });
-  console.log("----->", forms);
+
   if (!forms) return [];
 
   return forms;
 }
 
-export async function GetFormById(id: number) {
+export async function GetFormById(formId: number) {
+  const session = await getSession();
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  const mail = session?.user?.email;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      email: mail || "",
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found ");
+  }
+
   const form = await prisma.form.findUnique({
     where: {
-      id: id,
+      id: formId,
+      userId: user.id,
     },
   });
 
@@ -132,11 +164,16 @@ export async function GetFormById(id: number) {
 
 export async function UpdateFormContent(id: number, jsonElements: string) {
   const session = await getSession();
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const mail = session?.user?.email;
 
   const user = await prisma.user.findUnique({
     where: {
-      email: mail || "sakshamkapoor2005@gmail.com",
+      email: mail || "",
     },
   });
 
@@ -153,11 +190,7 @@ export async function UpdateFormContent(id: number, jsonElements: string) {
       content: jsonElements,
     },
   });
-  // const form = await prisma.form.update({
-  //   where:{
-  //     id:id
-  //   }
-  // })
+
   if (!savedForm) throw new Error("Form not saved ");
 }
 
@@ -165,14 +198,19 @@ export async function publishForm(
   id: number,
   jsonElements: string,
   shareUrl: string,
-  formColor?:string
+  formColor?: string
 ) {
   const session = await getSession();
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const mail = session?.user?.email;
 
   const user = await prisma.user.findUnique({
     where: {
-      email: mail || "sakshamkapoor2005@gmail.com",
+      email: mail || "",
     },
   });
 
@@ -188,7 +226,7 @@ export async function publishForm(
     data: {
       content: jsonElements,
       shareUrl,
-      formColor
+      formColor,
     },
   });
 
@@ -201,7 +239,7 @@ export async function getFormContentById(id: number) {
   return await prisma.form.update({
     select: {
       content: true,
-      formColor:true
+      formColor: true,
     },
     where: {
       id,
@@ -212,21 +250,19 @@ export async function getFormContentById(id: number) {
       },
     },
   });
-
 }
 
-
-export async function submitResponse(formId:number , response:string){
-    const data = await prisma.form.update({
-      where:{
-         id : formId
+export async function submitResponse(formId: number, response: string) {
+  const data = await prisma.form.update({
+    where: {
+      id: formId,
+    },
+    data: {
+      FormSubmissions: {
+        create: {
+          content: response,
+        },
       },
-      data:{
-         FormSubmissions:{
-            create:{
-               content:response
-            }
-         }
-      }
-    })
+    },
+  });
 }
